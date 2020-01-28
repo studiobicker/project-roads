@@ -68,6 +68,16 @@ class Vehicle extends DatabaseObject {
     $sql .= static::$order;
     return static::find_by_sql($sql);
   }
+  static public function find_by_kenteken($kenteken) {
+    $sql = "SELECT * FROM " . static::$table_name . " ";
+    $sql .= "WHERE rp_vervoer_kenteken='" . self::$database->escape_string($kenteken) . "'";
+    $obj_array = static::find_by_sql($sql);
+    if(!empty($obj_array)) {
+      return array_shift($obj_array);
+    } else {
+      return false;
+    }
+  }
 
 }
 

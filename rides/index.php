@@ -7,20 +7,68 @@
 <!--Content area start-->
 <main role="main" class="site-main container-fluid">
   <!-- end if -->
-  <div class="page-actions py-3">
-    <div>
-      <?php  if( $session->check_login('5') ) { ?>
-      <a href="new.php" class="btn btn-primary" tabindex="-1" role="button">Rit toevoegen</a>
-      <a href="new.php" class="btn btn-primary" tabindex="-1" role="button">Chaffeur inplannen</a>
-      <?php }?>
+  <div class="py-3">
+    <div class="row">
+      <div class="col-md-12">
+        <div class="page-actions">
+          <div>
+            <?php  if( $session->check_login('5') ) { ?>
+            <a href="new.php" class="btn btn-primary" tabindex="-1" role="button">Rit toevoegen</a>
+            <a href="new.php" class="btn btn-primary" tabindex="-1" role="button">Chaffeur inplannen</a>
+            <?php }?>
+          </div>
+          <form class="form-inline my-2 my-lg-0">
+            <input class="form-control mr-sm-2" type="search" placeholder="Zoeken" aria-label="Search">
+            <button class="btn btn-outline-primary my-2 my-sm-0" type="submit">Zoeken</button>
+          </form>
+        </div>
+      </div>
     </div>
-    <form class="form-inline my-2 my-lg-0">
-      <input class="form-control mr-sm-2" type="search" placeholder="Zoeken" aria-label="Search">
-      <button class="btn btn-outline-primary my-2 my-sm-0" type="submit">Zoeken</button>
-    </form>
+    <div class="row mt-2">
+      <div class="col-md-9">
+        <div class="page-actions">
+          <div class="date-controls">
+            <a href="<?php echo url_for('/rides'); ?>?datum=<?php echo get_day_before($session->datum) ?>"
+              id="prev_date" class="btn btn-outline-primary btn-sm mr-1"><i class="fas fa-chevron-left"></i></a>
+            <a href="<?php echo url_for('/rides'); ?>?datum=<?php echo get_day_after($session->datum) ?>" id="next_date"
+              class="btn btn-outline-primary btn-sm"><i class="fas fa-chevron-right"></i></a>
+            <h5 class="ml-3 mb-0"><?php echo get_day_date($session->datum) ?></h5>
+          </div>
+          <div class="vehicle-display">
+            <?php
+            if($session->vervoer) {
+              $vehicle = Vehicle::find_by_kenteken($session->vervoer);
+              if ($vehicle) { ?>
+            <h5><?php echo $vehicle->rp_vervoer_naam ?> &middot <?php echo $vehicle->rp_vervoer_telefoon ?></h5>
+            <?php } 
+            } ?>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row mt-2">
+      <div class="col-md-9">
+        <div class="page-actions">
+          <div class="input-group w-25">
+            <select class="custom-select mr-2" id="bulk-action">
+              <option selected>Acties...</option>
+              <option value="move">Verplaatsen</option>
+              <option value="copy">Kopieren</option>
+              <option value="retour">Terugreis boeken</option>
+            </select>
+
+            <button class="btn btn-outline-primary" type="button">Uitvoeren</button>
+
+          </div>
+          <div class="rooster-display">
+            Medewerker | <i class="fas fa-print"></i> print
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
   <!-- end if -->
-  <div class="row">
+  <div class=" row">
     <div class="col-md-9">
 
 

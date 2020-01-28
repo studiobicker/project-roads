@@ -2,9 +2,14 @@
   max-width: 1600px;
   margin: 0 auto;
   background: #fff;
-  padding: 0 50px;
   min-height: 100vh; }
 
+@media only screen and (min-width: 1500px) {
+  .wrapper {
+    padding: 0 50px; } }
+
+/* Navigation tabs
+-------------------------------------------------- */
 /* Login page
 -------------------------------------------------- */
 body.login {
@@ -92,6 +97,12 @@ body.login {
   .form-label-group input:-ms-input-placeholder {
     color: #777; } }
 
+/* Forms
+-------------------------------------------------- */
+.form-group.required .col-form-label:after {
+  content: " *";
+  color: #dc3545; }
+
 /* Messages on dashboard
 -------------------------------------------------- */
 .message {
@@ -126,6 +137,11 @@ body.login {
   display: flex;
   justify-content: space-between;
   align-items: flex-start; }
+
+.date-controls {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center; }
 
 /* widget
 -------------------------------------------------- */
@@ -176,9 +192,14 @@ a.list-group-item.active {
   width: 10px; }
 
 .icon.active::before {
-  font-family: "Font Awesome 5 Pro";
+  font-family: "Font Awesome 5 Free";
   font-weight: 900;
   content: "\f054"; }
+
+/* Auto-suggest styles
+-------------------------------------------------- */
+ul.suggestions {
+  display: none; }
 
 /*!
  * Bootstrap v4.4.1 (https://getbootstrap.com/)

@@ -21,7 +21,7 @@
 <!--Content area start-->
 <main code="main" class="site-main">
 
-  <div class="container py-3">
+  <div class="container-fluid py-3">
     <div class="row">
       <div class="col-md-9">
         <div class="row py-3">

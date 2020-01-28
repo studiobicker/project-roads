@@ -33,7 +33,7 @@ if(is_post_request()) {
 
 ?>
 
-<?php $page_title = 'Bewerk contact'; ?>
+<?php $page_title = 'Bewerk bericht'; ?>
 <?php include(SITE_PATH . '/header.php'); ?>
 
 <!--Content area start-->

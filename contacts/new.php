@@ -1,5 +1,5 @@
 <?php require_once('../private/initialize.php'); 
- require_login();
+ require_login('5');
 
 if(is_post_request()) {
 

@@ -76,6 +76,7 @@ class DatabaseObject {
     $sql .= ") VALUES ('";
     $sql .= join("', '", array_values($attributes));
     $sql .= "')";
+    
     $result = self::$database->query($sql);
     if($result) {
       $this->set_id(self::$database->insert_id);
@@ -86,7 +87,7 @@ class DatabaseObject {
   protected function update() {
     $this->validate();
     if(!empty($this->errors)) { return false; }
-    
+
     $attributes = $this->sanitized_attributes();
     $attribute_pairs = [];
     foreach($attributes as $key => $value) {
@@ -97,6 +98,7 @@ class DatabaseObject {
     $sql .= join(', ', $attribute_pairs);
     $sql .= " WHERE " . static::$table_id . "='" . self::$database->escape_string($this->get_id()) . "' ";
     $sql .= "LIMIT 1";
+
     $result = self::$database->query($sql);
     return $result;
   }
@@ -130,7 +132,7 @@ class DatabaseObject {
 
   protected function sanitized_attributes() {
     $sanitized = [];
-    foreach($this->attributes() as $key => $value) {
+     foreach($this->attributes() as $key => $value) {
       $sanitized[$key] = self::$database->escape_string($value);
     }
     return $sanitized;

@@ -5,7 +5,7 @@
 <?php include(SITE_PATH . '/header.php'); ?>
 
 <!--Content area start-->
-<main role="main" class="site-main container">
+<main role="main" class="site-main container-fluid">
   <!-- end if -->
   <div class="page-actions py-3">
     <a href="new.php" class="btn btn-primary" tabindex="-1" role="button">Toevoegen</a>

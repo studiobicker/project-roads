@@ -15,6 +15,7 @@
     "bootstrap": "^4.4.1",
     "bootstrap-colorpicker": "^3.2.0",
     "bootstrap-datepicker": "^1.9.0",
+    "inputmask": "^5.0.3",
     "node-sass": "^4.13.0"
   }
 }

@@ -2,9 +2,11 @@
 
 class Ride extends DatabaseObject {
 
-  static protected $table_name = "opdrachten o, ritten r, rp_vervoermiddelen v";
+  static protected $table_name = "jobs o";
+  static protected $table_vervoer = "rp_vervoermiddelen v";
   static protected $db_columns = 
-    ['opdracht_id', 
+    [
+    'opdracht_id', 
     'opdracht_opdrachtnummer', 
     'opdracht_datum', 
     'opdracht_opdrachtgeverid', 
@@ -16,12 +18,10 @@ class Ride extends DatabaseObject {
     'opdracht_telefoon',
     'opdracht_opdracht',
     'opdracht_factuurcode',
+    'opdracht_prijs',
     'opdracht_kostenplaats',
     'opdracht_status',
     'opdracht_modifiedby',
-    'opdracht_modified',
-    'rit_id',
-    'rit_opdrachtnummer',
     'rit_kenteken',
     'rit_aantalpassagiers',
     'rit_start',
@@ -40,16 +40,16 @@ class Ride extends DatabaseObject {
     'rit_bestemmingspostcode',
     'rit_bestemmingsplaats',
     'rit_bestemmingstelefoon',
-    'rit_message',
-    'rit_modifiedby',
-    'rp_vervoer_naam', 
+    'rit_message'];
+
+  static protected $db_columns_vervoer = 
+    ['rp_vervoer_naam', 
     'rp_vervoer_kenteken', 
     'rp_vervoer_telefoon', 
-    'rp_vervoer_kleur'
-    
-  ];
+    'rp_vervoer_kleur'];
+
   static protected $table_id = "opdracht_id";
-  static protected $order = "ORDER BY r.rit_start ASC, r.rit_eind ASC";
+  static protected $order = "ORDER BY o.rit_start ASC, o.rit_eind ASC";
 
   public $opdracht_id;
   public $opdracht_opdrachtnummer;
@@ -65,12 +65,13 @@ class Ride extends DatabaseObject {
   public $opdracht_telefoon;
   public $opdracht_opdracht;
   public $opdracht_factuurcode;
+  public $opdracht_prijs;
 
   public $opdracht_kostenplaats;
   public $opdracht_status;
   public $opdracht_modifiedby;
-  public $opdracht_modified;
 
+  public $rit_id;
   public $rit_opdrachtnummer;
   public $rit_kenteken;
   public $rit_aantalpassagiers;
@@ -94,12 +95,29 @@ class Ride extends DatabaseObject {
   public $rit_bestemmingstelefoon;
 
   public $rit_message;
-  public $rit_modifiedby;
 
   public $rp_vervoer_naam;
   public $rp_vervoer_kenteken;
   public $rp_vervoer_telefoon;
   public $rp_vervoer_kleur;
+
+  public const STATUS_OPTIONS = [
+    'O' => 'Optie',
+    'D' => 'Definitief',
+    'F' => 'Gefactureerd'
+  ];
+
+  public const INVOICE_OPTIONS = [
+    'bill' => 'Factureren',
+    'mark' => 'Markeren als gefactureerd',
+    'unmark' => 'Markeren als niet gefactureerd'
+  ];
+
+  public const VIEW_OPTIONS = [
+    'open' => 'Nog te factureren',
+    'all' => 'Alles tonen',
+    'billed' => 'Gefactureerde opdrachten'
+  ];
 
   public function __construct($args=[]) {
     //$this->opdracht_opdrachtnummer = isset($args['opdracht_opdrachtnummer']) ? $args['opdracht_opdrachtnummer'] : '';
@@ -116,10 +134,11 @@ class Ride extends DatabaseObject {
     $this->opdracht_telefoon = $args['opdracht_telefoon'] ?? '';
     $this->opdracht_opdracht = $args['opdracht_opdracht'] ?? '';
     $this->opdracht_factuurcode = $args['opdracht_factuurcode'] ?? '';
+    $this->opdracht_prijs = $args['opdracht_prijs'] ?? 0;
     $this->opdracht_kostenplaats = $args['opdracht_kostenplaats'] ?? '';
     $this->opdracht_status = $args['opdracht_status'] ?? '';
     $this->opdracht_modifiedby = $args['opdracht_modifiedby'] ?? '';
-    $this->opdracht_modifiedby = $args['opdracht_modified'] ?? '';
+    $this->opdracht_modified = $args['opdracht_modified'] ?? '';
 
     $this->rit_opdrachtnummer = $args['rit_opdrachtnummer'] ?? '';
     $this->rit_kenteken = $args['rit_kenteken'] ?? '';
@@ -195,48 +214,29 @@ class Ride extends DatabaseObject {
     $output .= ($this->opdracht_factuuradres) ? "{$this->opdracht_factuuradres}\r\n" : "";
     $output .= ($this->opdracht_factuurpostcode) ? "{$this->opdracht_factuurpostcode}  " : "";
     $output .= ($this->opdracht_factuurplaats) ? "{$this->opdracht_factuurplaats}\r\n" : "";
+    $output .= ($this->opdracht_kostenplaats) ? "{$this->opdracht_kostenplaats}\r\n" : "";
     return $output;
-  }
-
-
-  protected function validate() {
-    $this->errors = [];
-    // Add custom validations
-    
-    if(is_blank($this->fct_code)) {
-      $this->errors[] = "Vul een factuurcode in.";
-    } elseif (!has_unique_code($this->fct_code, $this->fct_id ?? 0)) {
-      $this->errors[] = "Factuurcode niet uniek. Probeer een andere.";
-    }
-    if(is_blank($this->fct_omschrijving)) {
-      $this->errors[] = "Vul een omschrijving van de code in.";
-    }
-    if(is_blank($this->fct_status)) {
-      $this->errors[] = "Vul een status van de code in.";
-    }
-
-    return $this->errors;
   }
 
   static public function find_all() {
     global $session;
-    $sql = "SELECT o.*, r.*, v.* FROM " . static::$table_name . " ";
-    $sql .= "WHERE o.opdracht_opdrachtnummer=r.rit_opdrachtnummer ";
-    $sql .= "AND r.rit_kenteken=v.rp_vervoer_kenteken ";
+    $sql = "SELECT o.*, v.* FROM " . static::$table_name . ", " . static::$table_vervoer . " ";
+    $sql .= "WHERE o.rit_kenteken=v.rp_vervoer_kenteken ";
     $sql .= "AND o.opdracht_datum='" . self::$database->escape_string($session->datum) . "' ";
     if($session->vervoer != 'ALL') {
-      $sql .= "AND r.rit_kenteken='" . self::$database->escape_string($session->vervoer) . "' ";
+      $sql .= "AND o.rit_kenteken='" . self::$database->escape_string($session->vervoer) . "' ";
     } 
     $sql .= static::$order;
+    
     return static::find_by_sql($sql);
   }
 
   static public function find_by_id($id) {
     global $session;
-    $sql = "SELECT * FROM " . static::$table_name . " ";
-    $sql .= "WHERE o.opdracht_opdrachtnummer=r.rit_opdrachtnummer ";
-    $sql .= "AND r.rit_kenteken=v.rp_vervoer_kenteken ";
+    $sql = "SELECT o.*, v.* FROM " . static::$table_name . ", " . static::$table_vervoer . " ";
+    $sql .= "WHERE o.rit_kenteken=v.rp_vervoer_kenteken ";
     $sql .= "AND " . static::$table_id . "='" . self::$database->escape_string($id) . "'";
+
     $obj_array = static::find_by_sql($sql);
     if(!empty($obj_array)) {
       return array_shift($obj_array);

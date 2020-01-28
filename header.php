@@ -10,9 +10,12 @@
   <link rel="stylesheet"
     href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker3.min.css"
     integrity="sha256-FAOaXTpl90/K8cXmSdsskbQN3nKYulhCpPbcFzGTWKI=" crossorigin="anonymous" />
+
+  <!--load fontawesome styles -->
   <link href="<?php echo url_for('/assets/css/all.css'); ?>" rel="stylesheet">
-  <!--load all styles -->
+  <!--load bootstrap + custom styles -->
   <link href="<?php echo url_for('/assets/css/app.css'); ?>" rel="stylesheet" type="text/css" />
+
 
 
 </head>
@@ -59,14 +62,18 @@
             href="<?php echo url_for('/rides/'); ?>"><span>Ritadministratie</span></a>
         </li>
         <li class=" nav-item">
+          <a class="nav-link <?php echo isActiveDir('/shifts') ?>"
+            href="<?php echo url_for('/shifts/'); ?>"><span>Rooster</span></a>
+        </li>
+        <li class=" nav-item">
           <a class="nav-link <?php echo isActiveDir('/contacts') ?>"
             href="<?php echo url_for('/contacts/'); ?>"><span>Adresboek</span> </a>
         </li>
         <!-- if level <= 1  -->
         <?php if( $session->check_login('1') )  { ?>
-        <li class="nav-item">
-          <a class="nav-link <?php echo isActivePage('facturen') ?>"
-            href="<?php echo url_for('/facturen.php'); ?>"><span>Facturen</span></a>
+        <li class=" nav-item">
+          <a class="nav-link <?php echo isActiveDir('/invoices') ?>"
+            href="<?php echo url_for('/invoices/'); ?>"><span>Facturen</span> </a>
         </li>
         <!-- if level <= 1  -->
         <li class="nav-item">

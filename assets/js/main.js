@@ -11,6 +11,12 @@
 
     $("#cp1").colorpicker();
 
+    /* format order date */
+    $(".input-group.date").datepicker({
+      language: "nl",
+      format: "dd-mm-yyyy"
+    });
+
     $("#datepicker").datepicker({
       format: "yyyy-mm-dd",
       language: "nl",
@@ -22,11 +28,6 @@
         "?datum=" +
         $("#datepicker").datepicker("getFormattedDate");
       // $("#picked-date").val($("#datepicker").datepicker("getFormattedDate"));
-    });
-
-    $(".input-group.date").datepicker({
-      language: "nl",
-      format: "dd-mm-yyyy"
     });
   });
 })(jQuery);

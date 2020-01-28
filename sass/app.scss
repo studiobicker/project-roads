@@ -14,9 +14,53 @@ $table-cell-padding: 0.5rem;
   max-width: 1600px;
   margin: 0 auto;
   background: #fff;
-  padding: 0 50px;
   min-height: 100vh;
 }
+
+@media only screen and (min-width: 1500px) {
+  .wrapper {
+    padding: 0 50px;
+  }
+}
+
+/* Navigation tabs
+-------------------------------------------------- */
+
+// .nav-tabs {
+//   border-bottom: 1px solid #388a9f !important;
+// }
+// .nav-tabs .nav-item {
+//   margin-right: 2px;
+// }
+
+// .nav-tabs .nav-link {
+//   background-color: #6dc3d6;
+//   color: #fff;
+//   border-color: #6dc3d6 #6dc3d6 #388a9f !important;
+//   border-top-left-radius: 0.5rem !important;
+//   border-top-right-radius: 0.5rem !important;
+// }
+// .nav-tabs .nav-link:hover,
+// .nav-tabs .nav-link:focus {
+//   background-color: #388a9f;
+//   border-color: #388a9f #388a9f #388a9f !important;
+// }
+// .nav-tabs .nav-link.disabled {
+//   color: #6c757d;
+//   background-color: transparent;
+//   border-color: transparent;
+// }
+// .nav-tabs .nav-link.active,
+// .nav-tabs .nav-item.show .nav-link {
+//   color: #fff !important;
+//   background-color: #3ca3bd !important;
+//   border-color: #388a9f #388a9f #3ca3bd !important;
+// }
+// .nav-tabs .dropdown-menu {
+//   margin-top: -1px;
+//   border-top-left-radius: 0;
+//   border-top-right-radius: 0;
+// }
 
 /* Login page
 -------------------------------------------------- */
@@ -122,6 +166,13 @@ body.login {
   }
 }
 
+/* Forms
+-------------------------------------------------- */
+.form-group.required .col-form-label:after {
+  content: " *";
+  color: #dc3545;
+}
+
 /* Messages on dashboard
 -------------------------------------------------- */
 .message {
@@ -158,6 +209,12 @@ body.login {
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
+}
+
+.date-controls {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
 }
 
 /* widget
@@ -216,9 +273,19 @@ a.list-group-item.active {
 }
 
 .icon.active::before {
-  font-family: "Font Awesome 5 Pro";
+  font-family: "Font Awesome 5 Free";
   font-weight: 900;
   content: "\f054";
+}
+
+/* Auto-suggest styles
+-------------------------------------------------- */
+
+ul.suggestions {
+  display: none;
+}
+
+ul.suggestions li {
 }
 
 @import "../node_modules/bootstrap/scss/bootstrap";

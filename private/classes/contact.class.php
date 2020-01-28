@@ -81,6 +81,17 @@ class Contact extends DatabaseObject {
     }
     return $this->errors;
   }
+
+  static public function find_by_keyword($key) {
+    $sql = "SELECT * FROM " . static::$table_name . " ";
+    $sql .= "WHERE rl_naam LIKE '%" . self::$database->escape_string($key) . "%' ";
+    $sql .= "OR rl_bedrijf LIKE '%" . self::$database->escape_string($key) . "%' ";
+    $sql .= "OR rl_adres LIKE '%" . self::$database->escape_string($key) . "%' ";
+    $sql .= "OR rl_kostenplaats LIKE '%" . self::$database->escape_string($key) . "%' ";
+    $sql .= static::$order;
+    return static::find_by_sql($sql);
+  }
+
 }
 
 ?>

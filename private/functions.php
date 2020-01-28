@@ -110,3 +110,31 @@ function get_date($datetime) {
     $output = (new DateTime($datetime))->format('d-m-Y');
     return $output;
 }
+function get_day_date($datetime) {
+    $weekdays =['Zondag', 'Maandag', 'Dinsdag','Woensdag', 'Donderdag', 'Vrijdag','Zaterdag'];
+    $weekday = $weekdays[(new DateTime($datetime))->format('w')];
+    $output = (new DateTime($datetime))->format('d-m-Y');
+    return $weekday . ' ' . $output;
+}
+
+function set_datetime($datetime, $time) {
+    $time_arr = explode(":", $time);
+    $output = (new DateTime($datetime))->setTime($time_arr[0],$time_arr[1])->format('Y-m-d H:i:s');
+    return $output;
+}
+
+function set_date($datetime) {
+    $output = (new DateTime($datetime))->format('Y-m-d');
+    return $output;
+}
+
+function get_day_before($datetime) {
+    $date = new DateTime($datetime);
+    $date -> modify( '-1 day' );
+    return $date->format('Y-m-d');
+}
+function get_day_after($datetime) {
+    $date = new DateTime($datetime);
+    $date -> modify( '+1 day' );
+    return $date->format('Y-m-d');
+}
